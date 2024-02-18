@@ -10,3 +10,4 @@ __pycache__
 # Dossiers virtuels
 venv/
 env/
+envCleen/
