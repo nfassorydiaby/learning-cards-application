@@ -5,54 +5,13 @@ from typing import Optional
 from fastapi import status
 from datetime import datetime, timedelta
 from typing import List, Dict
-
-
-
+from card import Card  # Import Card from card.py
+from category import Category  # Import Category from category.py
+from card_data import card_data  # Import card_data
 
 app = FastAPI(
     title="Learning Cards Application",
     description="This API aim to provide feature to manage a graphical interface for Learning Cards Application.")
-
-class Category(str, Enum):
-    FIRST = "FIRST"
-    SECOND = "SECOND"
-    THIRD = "THIRD"
-    FOURTH = "FOURTH"
-    FIFTH = "FIFTH"
-    SIXTH = "SIXTH"
-    SEVENTH = "SEVENTH"
-    DONE = "DONE"
-
-class Card(BaseModel):
-    id: Optional[int] = None  
-    category: Category
-    question: str
-    answer: str
-    tag: Optional[str] = None
-
-card_data = [
-    {
-        "id": 1,
-        "category": Category.FIRST.value,
-        "question": "What is pair programming ?",
-        "answer": "A practice to work in pair on same computer.",
-        "tag": "Teamwork"
-    },
-    {
-        "id": 2,
-        "category": Category.SECOND.value,
-        "question": "str",
-        "answer": "str",
-        "tag": "Teamwork"
-    },
-    {
-        "id": 3,
-        "category": Category.THIRD.value,
-        "question": "str",
-        "answer": "str",
-        "tag": "Teamwork"
-    },
-]
 
 @app.get("/cards/", tags=["Cards"])
 async def read_cards():
