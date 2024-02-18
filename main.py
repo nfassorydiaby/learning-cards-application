@@ -28,7 +28,7 @@ async def create_card(card: Card):
     card_data.append(card_dict) 
     return card
 
-@app.get("/cards/quizz/")
+@app.get("/cards/quizz/", response_model=Card, status_code=status.HTTP_201_CREATED, tags=["Learning"])
 async def get_quiz_cards():
     # Filtre et retourne uniquement les cartes de la catégorie FIRST
     today_cards: List[Dict] = [card for card in card_data if card["category"] == "FIRST"]
