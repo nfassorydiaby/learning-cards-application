@@ -5,15 +5,17 @@ from typing import Optional
 from fastapi import status
 from datetime import datetime, timedelta
 from typing import List, Dict
+from uuid import UUID, uuid4
+from cardId import CardId
 
 class Card(BaseModel):
-    id: Optional[int] = Field(default=None, example=0)  # Set default value to None
+    id: Optional[UUID] = Field(default_factory=CardId.generate)
     category: Category = Category.FIRST
     question: str
     answer: str
     tag: Optional[str] = None
 
-    def set_category(self):
+    def setCategory(self):
         currentCategoryIndex = Category.__members__[self.category].value
         nextCategoryIndex = (currentCategoryIndex + 1) % len(Category)
         nextCategory = list(Category)[nextCategoryIndex]

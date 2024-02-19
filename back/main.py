@@ -19,17 +19,12 @@ async def read_cards():
 
 @app.post("/cards/", response_model=Card, status_code=status.HTTP_201_CREATED, tags=["Cards"])
 async def create_card(card: Card):
-    if card_data:
-        max_id = max(item["id"] for item in card_data)
-    else:
-        max_id = 0
-    card.id = max_id + 1 
     card_dict = card.dict() 
     card_data.append(card_dict) 
     return card
 
-@app.get("/cards/quizz/", response_model=Card, status_code=status.HTTP_201_CREATED, tags=["Learning"])
-async def get_quiz_cards():
+@app.get("/cards/quizz/", response_model=List[Card], status_code=status.HTTP_201_CREATED, tags=["Learning"])
+async def get_quiz_cards(date: str | None = None):
     # Filtre et retourne uniquement les cartes de la catégorie FIRST
     today_cards: List[Dict] = [card for card in card_data if card["category"] == "FIRST"]
     return today_cards
