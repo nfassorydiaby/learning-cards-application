@@ -7,8 +7,11 @@ from fastapi.params import Depends
 
 from typing import List, Annotated
 from functions.config_quizz_card import currentCards
+
+from config_quizz_card import setCurrentCards
+from category import Category  # Import Category from category.py
+
 from card_data import card_data  # Import card_data
-from card_quizz import list_card_by_frequency
 from fastapi import Body
 import auth
 
@@ -27,7 +30,8 @@ models.Base.metadata.create_all(bind=engine)
 # pydentic validation
 # card from card.py
 
-valid_body = {
+
+validBody = {
     "isValid": True
 }
 
@@ -55,7 +59,7 @@ async def create_card(card: Card, db: db_dependency):
 
     card_dict = card.dict()
     card_data.append(card_dict)
-    Card.add_to_list(card_data, list_card_by_frequency)
+    card.addToList()
 
     # add card to the database
     db_card = models.Card(**card.dict())
@@ -68,12 +72,12 @@ async def create_card(card: Card, db: db_dependency):
 @app.get("/cards/quizz/", response_model=List[Card], status_code=status.HTTP_201_CREATED, tags=["Learning"])
 async def get_quiz_cards(date: str | None = None):
     # Filtre et retourne uniquement les cartes de la catégorie FIRST
-    quizz_cards = currentCards(list_card_by_frequency, card_data)
-    return quizz_cards
+    quizzCards = getCurrentCards()
+    return quizzCards
 
 
-@app.patch('/cards/{cardId}/answer/', status_code=status. HTTP_204_NO_CONTENT, tags=["Learning"])
-async def check_reponse(cardId: int, isValid: dict = Body(valid_body), ):
-    # Process the request body
-    # You can access the fields of valid_body like valid_body["isValid"]
-    return {"message": f"Card patched "}
+@app.patch('/cards/{cardId}/answer/', status_code=status.HTTP_204_NO_CONTENT, tags=["Learning"])
+async def check_reponse(cardId: int, cardResponse: dict = Body(validBody), ):
+    card = Card.getCard(cardId)
+    category = card.manageCategory(cardResponse.isValid)
+    setCurrentCards(cardId, category)
