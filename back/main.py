@@ -1,13 +1,16 @@
 
+from multiprocessing import AuthenticationError
 from card import Card  # Import Card from card.py
 from fastapi import FastAPI, HTTPException, Depends, status
 from fastapi import status
-from fastapi.params import Depends, Annotated
-from typing import List
+from fastapi.params import Depends
+
+from typing import List, Annotated
 from functions.config_quizz_card import currentCards
 from card_data import card_data  # Import card_data
 from card_quizz import list_card_by_frequency
 from fastapi import Body
+import auth
 
 # Implementation of database
 from database import engine, SessionLocal
@@ -17,7 +20,7 @@ from sqlalchemy.orm import Session
 app = FastAPI(
     title="Learning Cards Application",
     description="This API aim to provide feature to manage a graphical interface for Learning Cards Application.")
-
+app.include_router(auth.router)
 # create the database
 models.Base.metadata.create_all(bind=engine)
 
