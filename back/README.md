@@ -11,5 +11,5 @@ pip install -r requirements.txt
 
 # lunsh back end app 
 
-uvicorn main:app --port 80001 --reload
+uvicorn main:app --port 8000 --reload
 

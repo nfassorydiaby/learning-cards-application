@@ -2,6 +2,7 @@
 from card import Card  # Import Card from card.py
 from fastapi import FastAPI, HTTPException, Depends, status
 from fastapi import status
+from fastapi.params import Depends, Annotated
 from typing import List
 from functions.config_quizz_card import currentCards
 from card_data import card_data  # Import card_data
@@ -38,16 +39,26 @@ def get_db():
         db.close()
 
 
+db_dependency = Annotated[Session, Depends(get_db)]
+
+
 @app.get("/cards/", tags=["Cards"])
 async def read_cards():
     return card_data
 
 
 @app.post("/cards/", response_model=Card, status_code=status.HTTP_201_CREATED, tags=["Cards"])
-async def create_card(card: Card):
+async def create_card(card: Card, db: db_dependency):
+
     card_dict = card.dict()
     card_data.append(card_dict)
     Card.add_to_list(card_data, list_card_by_frequency)
+
+    # add card to the database
+    db_card = models.Card(**card.dict())
+    db.add(db_card)
+    db.commit()
+
     return card
 
 
