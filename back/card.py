@@ -25,3 +25,18 @@ class Card(BaseModel):
         nextCategory = list(Category)[nextCategoryIndex]
         self.category = nextCategory
 
+    def manageCategory(self, cardResponse) -> str:
+        if cardResponse:
+            self.setCategory()
+        else: 
+            self.category = Category.FIRST
+        
+        return self.category
+
+    @staticmethod
+    def getCard(id):
+        for card in card_data:
+            if card["id"] == id:
+                # Set the category for the found card
+                return card  # Or any other category as needed
+
