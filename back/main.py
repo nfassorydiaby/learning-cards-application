@@ -60,9 +60,12 @@ async def create_card(card: Card, db: db_dependency):
     card.addToList()
 
     # add card to the database
-    # db_card = models.Card(**card.dict())
-    # db.add(db_card)
-    # db.commit()
+    db_card = models.Card(**card.dict())
+    print(db_card)
+    db.add(db_card)
+    db.commit()
+    
+
 
     return card
 
