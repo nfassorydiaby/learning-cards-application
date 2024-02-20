@@ -4,16 +4,14 @@ from card import Card  # Import Card from card.py
 from fastapi import FastAPI, HTTPException, Depends, status
 from fastapi import status
 from fastapi.params import Depends
-
 from typing import List, Annotated
-from functions.config_quizz_card import currentCards
-
+from configQuizzCard import getCurrentCards
 from configQuizzCard import setCurrentCards
 from category import Category  # Import Category from category.py
 
 from card_data import card_data  # Import card_data
 from fastapi import Body
-import auth
+# import auth
 
 # Implementation of database
 from database import engine, SessionLocal
@@ -23,7 +21,7 @@ from sqlalchemy.orm import Session
 app = FastAPI(
     title="Learning Cards Application",
     description="This API aim to provide feature to manage a graphical interface for Learning Cards Application.")
-app.include_router(auth.router)
+# app.include_router(auth.router)
 # create the database
 models.Base.metadata.create_all(bind=engine)
 
@@ -62,9 +60,9 @@ async def create_card(card: Card, db: db_dependency):
     card.addToList()
 
     # add card to the database
-    db_card = models.Card(**card.dict())
-    db.add(db_card)
-    db.commit()
+    # db_card = models.Card(**card.dict())
+    # db.add(db_card)
+    # db.commit()
 
     return card
 
