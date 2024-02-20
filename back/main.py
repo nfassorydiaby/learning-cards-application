@@ -16,8 +16,8 @@ app = FastAPI(
     title="Learning Cards Application",
     description="This API aim to provide feature to manage a graphical interface for Learning Cards Application.")
 
-valid_body = {
-  "isValid": True
+validBody = {
+    "isValid": True
 }
 
 @app.get("/cards/", tags=["Cards"])
@@ -26,19 +26,19 @@ async def read_cards():
 
 @app.post("/cards/", response_model=Card, status_code=status.HTTP_201_CREATED, tags=["Cards"])
 async def create_card(card: Card):
-    card_dict = card.dict() 
-    card_data.append(card_dict)
-    Card.add_to_list(card_data, list_card_by_frequency) 
+    cardDict = card.dict() 
+    card_data.append(cardDict)
+    card.addToList() 
     return card
 
 @app.get("/cards/quizz/", response_model=List[Card], status_code=status.HTTP_201_CREATED, tags=["Learning"])
 async def get_quiz_cards(date: str | None = None):
     # Filtre et retourne uniquement les cartes de la catégorie FIRST
-    quizz_cards = currentCards(list_card_by_frequency, card_data)
-    return quizz_cards
+    quizzCards = currentCards()
+    return quizzCards
 
 @app.patch('/cards/{cardId}/answer/', status_code=status. HTTP_204_NO_CONTENT, tags=["Learning"])
-async def check_reponse(cardId: int, isValid: dict = Body(valid_body), ):
+async def check_reponse(cardId: int, isValid: dict = Body(validBody), ):
     # Process the request body
     # You can access the fields of valid_body like valid_body["isValid"]
     return {"message": f"Card patched "}
