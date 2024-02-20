@@ -8,7 +8,7 @@ from fastapi.params import Depends
 from typing import List, Annotated
 from functions.config_quizz_card import currentCards
 
-from config_quizz_card import setCurrentCards
+from configQuizzCard import setCurrentCards
 from category import Category  # Import Category from category.py
 
 from card_data import card_data  # Import card_data
