@@ -1,5 +1,9 @@
-fastapi 
+fastapi
 uvicorn
 sqlalchemy
-pymysql
+
 cryptography
+starlette
+pydantic
+passlib
+jose
