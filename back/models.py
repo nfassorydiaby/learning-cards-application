@@ -1,5 +1,6 @@
 from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, DateTime
 from database import Base
+import uuid
 
 
 class Users(Base):
@@ -15,7 +16,8 @@ class Users(Base):
 class Card(Base):
     __tablename__ = "cards"
 
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(String(255), primary_key=True,
+                index=True)
     category = Column(String(50), index=True)
     question = Column(String(50), index=True)
     answer = Column(String(50), index=True)

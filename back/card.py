@@ -9,8 +9,9 @@ from cardId import CardId
 from card_data import card_data  # Import card_data
 from card_quizz import list_card_by_frequency
 
+
 class Card(BaseModel):
-    id: Optional[UUID] = Field(default_factory=CardId.generate)
+    id: UUID = Field(default_factory=uuid4)
     category: Category = Category.FIRST
     question: str
     answer: str
@@ -28,9 +29,9 @@ class Card(BaseModel):
     def manageCategory(self, cardResponse) -> str:
         if cardResponse:
             self.setCategory()
-        else: 
+        else:
             self.category = Category.FIRST
-        
+
         return self.category
 
     @staticmethod
@@ -39,4 +40,3 @@ class Card(BaseModel):
             if card["id"] == id:
                 # Set the category for the found card
                 return card  # Or any other category as needed
-
