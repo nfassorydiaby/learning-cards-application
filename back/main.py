@@ -21,13 +21,10 @@ from sqlalchemy.orm import Session
 app = FastAPI(
     title="Learning Cards Application",
     description="This API aim to provide feature to manage a graphical interface for Learning Cards Application.")
+
 # app.include_router(auth.router)
 # create the database
 models.Base.metadata.create_all(bind=engine)
-
-# pydentic validation
-# card from card.py
-
 
 validBody = {
     "isValid": True
@@ -47,9 +44,11 @@ def get_db():
 db_dependency = Annotated[Session, Depends(get_db)]
 
 
-@app.get("/cards/", tags=["Cards"])
-async def read_cards():
-    return card_data
+@app.get("/cards/", status_code=status.HTTP_200_OK, tags=["Cards"])
+async def read_cards(db: db_dependency):
+    cards = db.query(models.Card).all()
+    return cards
+    # return card_data
 
 
 @app.post("/cards/", response_model=Card, status_code=status.HTTP_201_CREATED, tags=["Cards"])

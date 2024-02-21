@@ -17,7 +17,8 @@ class Card(Base):
     __tablename__ = "cards"
 
     id = Column(String(255), primary_key=True,
-                index=True)
+                index=True, default=uuid.uuid4)
+
     category = Column(String(50), index=True)
     question = Column(String(50), index=True)
     answer = Column(String(50), index=True)

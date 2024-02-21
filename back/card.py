@@ -11,7 +11,7 @@ from card_quizz import list_card_by_frequency
 
 
 class Card(BaseModel):
-    id: UUID = Field(default_factory=uuid4)
+    id: Optional[UUID] = Field(default_factory=uuid4)
     category: Category = Category.FIRST
     question: str
     answer: str
