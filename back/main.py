@@ -8,7 +8,7 @@ from typing import List, Annotated
 from configQuizzCard import getCurrentCards
 from configQuizzCard import setCurrentCards
 from category import Category  # Import Category from category.py
-
+from uuid import UUID as UUID4
 from card_data import card_data  # Import card_data
 from fastapi import Body
 # import auth
@@ -67,14 +67,43 @@ async def create_card(card: Card, db: db_dependency):
 
 
 @app.get("/cards/quizz/", response_model=List[Card], status_code=status.HTTP_201_CREATED, tags=["Learning"])
-async def get_quiz_cards(date: str | None = None):
-    # Filtre et retourne uniquement les cartes de la catégorie FIRST
-    quizzCards = getCurrentCards()
+async def get_quiz_cards(db: db_dependency, date: str | None = None):
+    # card firlered by category under 7
+    cards = db.query(models.Card).filter(models.Card.category < 7).all()
+    # get all cards whose frequency is 0 or you reduice the frequency by 1
+    quizzCards = []
+    for card in cards:
+        if card.frequency == 0:
+            quizzCards.append(card)
+        else:
+            card.frequency -= 1
+            print(card.frequency)
+            # update the card in the database
+            db.query(models.Card).filter(models.Card.id ==
+                                         card.id).update({"frequency": card.frequency})
+            db.commit()
+
     return quizzCards
 
 
 @app.patch('/cards/{cardId}/answer/', status_code=status.HTTP_204_NO_CONTENT, tags=["Learning"])
-async def check_reponse(cardId: int, cardResponse: dict = Body(validBody), ):
-    card = Card.getCard(cardId)
-    category = card.manageCategory(cardResponse.isValid)
-    setCurrentCards(cardId, category)
+async def check_reponse(db: db_dependency, cardId: UUID4, cardResponse: dict = Body(validBody), ):
+   # Récupérer la carte par son ID
+    card = db.query(models.Card).filter(models.Card.id == cardId).first()
+    print("cardID :", cardId)
+    print("card :", card)
+    # Si la réponse de la carte est valide, nous incrémentons la fréquence de la carte
+    if cardResponse['isValid']:
+        prochaine_categorie = Category(card.category).value + 1
+        if prochaine_categorie <= len(Category):
+            prochaine_categorie_str = Category(prochaine_categorie).name
+        else:
+            prochaine_categorie_str = Category.DONE.value
+        card.category = prochaine_categorie_str
+        # Mettre à jour la fréquence de la carte en catégorie - 1
+        card.frequency = prochaine_categorie - 1
+        db.commit()
+    else:
+        card.category = Category.FIRST.value
+        card.frequency = 0
+        db.commit()

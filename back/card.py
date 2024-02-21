@@ -12,7 +12,7 @@ from card_quizz import list_card_by_frequency
 
 class Card(BaseModel):
     id: Optional[UUID] = Field(default_factory=uuid4)
-    category: Category = Category.FIRST
+    category: Optional[Category] = Category.FIRST
     question: str
     answer: str
     tag: Optional[str] = None

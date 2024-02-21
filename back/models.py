@@ -19,10 +19,8 @@ class Card(Base):
     id = Column(String(255), primary_key=True,
                 index=True, default=uuid.uuid4)
 
-    category = Column(String(50), index=True)
+    egory = Column(String(50), index=True, default="FIRST")
     question = Column(String(50), index=True)
     answer = Column(String(50), index=True)
     tag = Column(String(50), index=True)
-    # user_id = Column(Integer, ForeignKey("users.id"))
-    # create_date = Column(DateTime, index=True)
-    # update_date = Column(DateTime, index=True)
+    frequency = Column(Integer, index=True, default=0)
