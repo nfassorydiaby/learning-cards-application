@@ -1,12 +1,7 @@
 from category import Category
 from pydantic import BaseModel, Field
 from typing import Optional
-from fastapi import status
-from datetime import datetime, timedelta
-from typing import List, Dict
 from uuid import UUID, uuid4
-from cardId import CardId
-from card_data import card_data  # Import card_data
 from card_quizz import list_card_by_frequency
 
 
@@ -33,10 +28,3 @@ class Card(BaseModel):
             self.category = Category.FIRST
 
         return self.category
-
-    @staticmethod
-    def getCard(id):
-        for card in card_data:
-            if card["id"] == id:
-                # Set the category for the found card
-                return card  # Or any other category as needed

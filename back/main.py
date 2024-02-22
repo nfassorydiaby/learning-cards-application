@@ -5,11 +5,8 @@ from fastapi import FastAPI, HTTPException, Depends, status
 from fastapi import status
 from fastapi.params import Depends
 from typing import List, Annotated
-from configQuizzCard import getCurrentCards
-from configQuizzCard import setCurrentCards
 from category import Category  # Import Category from category.py
 from uuid import UUID as UUID4
-from card_data import card_data  # Import card_data
 from fastapi import Body
 # import auth
 
@@ -53,11 +50,6 @@ async def read_cards(db: db_dependency):
 
 @app.post("/cards/", response_model=Card, status_code=status.HTTP_201_CREATED, tags=["Cards"])
 async def create_card(card: Card, db: db_dependency):
-
-    card_dict = card.dict()
-    card_data.append(card_dict)
-    card.addToList()
-
     # add card to the database
     db_card = models.Card(**card.dict())
     db.add(db_card)
