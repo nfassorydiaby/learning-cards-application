@@ -110,9 +110,10 @@ async def check_reponse(db: db_dependency, cardId: UUID4, cardResponse: dict = B
             prochaine_categorie_str = Category(card.category).value
             print("prochaine category en string :", prochaine_categorie_str)
         else:
-            prochaine_categorie_str = Category(card.category).value
+            prochaine_categorie_str = Category.DONE.value
         card.category = prochaine_categorie_str
         card.frequency = prochaine_categorie_numer - 1
+        print("nouvelle frequence : ", card.frequency)
         db.commit()
     else:
         card.category = Category.FIRST.value
