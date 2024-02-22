@@ -13,3 +13,5 @@ pip install -r requirements.txt
 
 uvicorn main:app --port 8000 --reload
 
+# to lunsh test we can do 
+docker exec -it learning-cards-application-app-1 pytest -s test_app.py

@@ -1,11 +1,11 @@
 
 from multiprocessing import AuthenticationError
-from card import Card  # Import Card from card.py
+from card import Card
 from fastapi import FastAPI, HTTPException, Depends, status
 from fastapi import status
 from fastapi.params import Depends
 from typing import List, Annotated
-from category import Category  # Import Category from category.py
+from category import Category
 from uuid import UUID as UUID4
 from fastapi import Body
 # import auth
@@ -14,6 +14,17 @@ from fastapi import Body
 from database import engine, SessionLocal
 import models
 from sqlalchemy.orm import Session
+
+category_map = {
+    Category.FIRST.value: 1,
+    Category.SECOND.value: 2,
+    Category.THIRD.value: 3,
+    Category.FOURTH.value: 4,
+    Category.FIFTH.value: 5,
+    Category.SIXTH.value: 6,
+    Category.SEVENTH.value: 7,
+}
+
 
 app = FastAPI(
     title="Learning Cards Application",
@@ -26,7 +37,6 @@ models.Base.metadata.create_all(bind=engine)
 validBody = {
     "isValid": True
 }
-
 # getting the database
 
 
@@ -74,18 +84,7 @@ async def get_quiz_cards(db: db_dependency, date: str | None = None):
             db.query(models.Card).filter(models.Card.id ==
                                          card.id).update({"frequency": card.frequency})
             db.commit()
-
     return quizzCards
-
-category_map = {
-    Category.FIRST.value: 1,
-    Category.SECOND.value: 2,
-    Category.THIRD.value: 3,
-    Category.FOURTH.value: 4,
-    Category.FIFTH.value: 5,
-    Category.SIXTH.value: 6,
-    Category.SEVENTH.value: 7,
-}
 
 
 @app.patch('/cards/{cardId}/answer/', status_code=status.HTTP_204_NO_CONTENT, tags=["Learning"])
@@ -97,15 +96,15 @@ async def check_reponse(db: db_dependency, cardId: UUID4, cardResponse: dict = B
     # Si la réponse est valide, incrémenter la fréquence
     if cardResponse['isValid']:
         prochaine_categorie_numer = category_map[card.category]
-        print("prochaine category en chiffre :", prochaine_categorie_numer)
+        # print("prochaine category en chiffre :", prochaine_categorie_numer)
         if prochaine_categorie_numer <= len(category_map):
             prochaine_categorie_str = Category(card.category).value
-            print("prochaine category en string :", prochaine_categorie_str)
+            # print("prochaine category en string :", prochaine_categorie_str)
         else:
             prochaine_categorie_str = Category.DONE.value
         card.category = prochaine_categorie_str
         card.frequency = prochaine_categorie_numer - 1
-        print("nouvelle frequence : ", card.frequency)
+        # print("nouvelle frequence : ", card.frequency)
         db.commit()
     else:
         card.category = Category.FIRST.value

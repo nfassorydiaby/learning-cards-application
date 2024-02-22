@@ -19,6 +19,7 @@ services:
       - db
 
   app:
+    container_name: learning-cards-application-app 
     build: 
       context: .
       dockerfile: Dockerfile
