@@ -14,7 +14,6 @@ def test_read_cards():
 
 def test_create_card():
     card_data = {
-        "category": "FIRST",
         "question": "string",
         "answer": "string",
         "tag": "string"
@@ -43,7 +42,6 @@ def test_get_quiz_cards():
 def test_check_reponse():
     # Création d'une nouvelle carte
     card_data = {
-        "category": "FIRST",
         "question": "string",
         "answer": "string",
         "tag": "string"

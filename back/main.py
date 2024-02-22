@@ -15,16 +15,6 @@ from database import engine, SessionLocal
 import models
 from sqlalchemy.orm import Session
 
-category_map = {
-    Category.FIRST.value: 1,
-    Category.SECOND.value: 2,
-    Category.THIRD.value: 3,
-    Category.FOURTH.value: 4,
-    Category.FIFTH.value: 5,
-    Category.SIXTH.value: 6,
-    Category.SEVENTH.value: 7,
-}
-
 
 app = FastAPI(
     title="Learning Cards Application",
@@ -39,8 +29,7 @@ validBody = {
 }
 # getting the database
 
-
-def get_db():
+def getDb():
     db = SessionLocal()
     try:
         yield db
@@ -48,65 +37,54 @@ def get_db():
         db.close()
 
 
-db_dependency = Annotated[Session, Depends(get_db)]
+dbDependency = Annotated[Session, Depends(getDb)]
 
 
 @app.get("/cards/", status_code=status.HTTP_200_OK, tags=["Cards"])
-async def read_cards(db: db_dependency):
+async def readCards(db: dbDependency):
     cards = db.query(models.Card).all()
     return cards
-    # return card_data
 
 
 @app.post("/cards/", response_model=Card, status_code=status.HTTP_201_CREATED, tags=["Cards"])
-async def create_card(card: Card, db: db_dependency):
-    # add card to the database
-    db_card = models.Card(**card.dict())
-    db.add(db_card)
+async def createCard(card: Card, db: dbDependency):
+    dbCard = models.Card(**card.dict())
+    db.add(dbCard)
     db.commit()
-
     return card
 
 
 @app.get("/cards/quizz/", response_model=List[Card], status_code=status.HTTP_201_CREATED, tags=["Learning"])
-async def get_quiz_cards(db: db_dependency, date: str | None = None):
-    # card firlered by category under 7
+async def getQuizCards(db: dbDependency, date: str | None = None):
     cards = db.query(models.Card).filter(models.Card.category < 7).all()
-    # get all cards whose frequency is 0 or you reduice the frequency by 1
     quizzCards = []
     for card in cards:
-        if card.frequency == 0:
+        if card.remainingDays == 0:
             quizzCards.append(card)
         else:
-            card.frequency -= 1
-            print(card.frequency)
-            # update the card in the database
-            db.query(models.Card).filter(models.Card.id ==
-                                         card.id).update({"frequency": card.frequency})
+            card.remainingDays -= 1
+            db.query(models.Card).filter(models.Card.id == card.id).update({"remainingDays": card.remainingDays})
             db.commit()
     return quizzCards
 
 
 @app.patch('/cards/{cardId}/answer/', status_code=status.HTTP_204_NO_CONTENT, tags=["Learning"])
-async def check_reponse(db: db_dependency, cardId: UUID4, cardResponse: dict = Body(validBody), ):
-
-    # Récupérer la carte par son ID
+async def checkResponse(db: dbDependency, cardId: UUID4, cardResponse: dict = Body(validBody)):
     card = db.query(models.Card).filter(models.Card.id == str(cardId)).first()
 
-    # Si la réponse est valide, incrémenter la fréquence
     if cardResponse['isValid']:
-        prochaine_categorie_numer = category_map[card.category]
-        # print("prochaine category en chiffre :", prochaine_categorie_numer)
-        if prochaine_categorie_numer <= len(category_map):
-            prochaine_categorie_str = Category(card.category).value
-            # print("prochaine category en string :", prochaine_categorie_str)
+        currentCategoryIndex = list(Category).index(card.category)
+        nextCategoryIndex = currentCategoryIndex + 1
+        if nextCategoryIndex < len(Category):
+            nextCategory = list(Category)[nextCategoryIndex]
         else:
-            prochaine_categorie_str = Category.DONE.value
-        card.category = prochaine_categorie_str
-        card.frequency = prochaine_categorie_numer - 1
-        # print("nouvelle frequence : ", card.frequency)
+            nextCategory = Category.DONE.value
+
+        card.category = nextCategory
+        card.remainingDays = nextCategoryIndex
         db.commit()
     else:
         card.category = Category.FIRST.value
-        card.frequency = 0
+        card.remainingDays = 0
         db.commit()
+
