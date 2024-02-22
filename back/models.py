@@ -19,7 +19,7 @@ class Card(Base):
     id = Column(String(255), primary_key=True,
                 index=True, default=uuid.uuid4)
 
-    egory = Column(String(50), index=True, default="FIRST")
+    category = Column(String(50), index=True, default="FIRST")
     question = Column(String(50), index=True)
     answer = Column(String(50), index=True)
     tag = Column(String(50), index=True)

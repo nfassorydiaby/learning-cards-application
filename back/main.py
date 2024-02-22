@@ -85,23 +85,34 @@ async def get_quiz_cards(db: db_dependency, date: str | None = None):
 
     return quizzCards
 
+category_map = {
+    Category.FIRST.value: 1,
+    Category.SECOND.value: 2,
+    Category.THIRD.value: 3,
+    Category.FOURTH.value: 4,
+    Category.FIFTH.value: 5,
+    Category.SIXTH.value: 6,
+    Category.SEVENTH.value: 7,
+}
+
 
 @app.patch('/cards/{cardId}/answer/', status_code=status.HTTP_204_NO_CONTENT, tags=["Learning"])
 async def check_reponse(db: db_dependency, cardId: UUID4, cardResponse: dict = Body(validBody), ):
-   # Récupérer la carte par son ID
-    card = db.query(models.Card).filter(models.Card.id == cardId).first()
-    print("cardID :", cardId)
-    print("card :", card)
-    # Si la réponse de la carte est valide, nous incrémentons la fréquence de la carte
+
+    # Récupérer la carte par son ID
+    card = db.query(models.Card).filter(models.Card.id == str(cardId)).first()
+
+    # Si la réponse est valide, incrémenter la fréquence
     if cardResponse['isValid']:
-        prochaine_categorie = Category(card.category).value + 1
-        if prochaine_categorie <= len(Category):
-            prochaine_categorie_str = Category(prochaine_categorie).name
+        prochaine_categorie_numer = category_map[card.category]
+        print("prochaine category en chiffre :", prochaine_categorie_numer)
+        if prochaine_categorie_numer <= len(category_map):
+            prochaine_categorie_str = Category(card.category).value
+            print("prochaine category en string :", prochaine_categorie_str)
         else:
-            prochaine_categorie_str = Category.DONE.value
+            prochaine_categorie_str = Category(card.category).value
         card.category = prochaine_categorie_str
-        # Mettre à jour la fréquence de la carte en catégorie - 1
-        card.frequency = prochaine_categorie - 1
+        card.frequency = prochaine_categorie_numer - 1
         db.commit()
     else:
         card.category = Category.FIRST.value
