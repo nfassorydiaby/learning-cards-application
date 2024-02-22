@@ -8,6 +8,9 @@ from typing import List, Annotated
 from category import Category
 from uuid import UUID as UUID4
 from fastapi import Body
+from fastapi.middleware.cors import CORSMiddleware
+
+
 # import auth
 
 # Implementation of database
@@ -19,6 +22,21 @@ from sqlalchemy.orm import Session
 app = FastAPI(
     title="Learning Cards Application",
     description="This API aim to provide feature to manage a graphical interface for Learning Cards Application.")
+
+origins = [
+    "http://localhost:3000", 
+    "http://localhost:3001", 
+    "http://localhost:8000"
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,  # Les origines qui peuvent faire des requêtes
+    allow_credentials=True,
+    allow_methods=["*"],  # Autoriser toutes les méthodes
+    allow_headers=["*"],  # Autoriser tous les headers
+)
+
 
 # app.include_router(auth.router)
 # create the database
