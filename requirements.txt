@@ -8,3 +8,6 @@ pydantic
 passlib
 jose
 PyMySQL
+pytest
+requests
+httpx

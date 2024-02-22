@@ -1,7 +1,6 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy.ext.declarative import declarative_base
-
+from sqlalchemy.orm import declarative_base
 
 URL_DATABASE = "mysql+pymysql://user:password@db:3306/database"
 
