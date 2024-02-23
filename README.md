@@ -4,6 +4,10 @@ This repository contains the code for a learning cards application.
 
 ## Setup the backend Instructions 
 
+Back runs on http://localhost:8000/
+
+**In /back folder :**
+
 1. **Create a Virtual Environment:**
     ```bash
     cd back
@@ -24,8 +28,14 @@ This repository contains the code for a learning cards application.
 
 To launch the backend application, use the following command:
 ```bash
-docker compose build
+docker compose build --no-cache
 docker compose up -d
+```
+
+Run again these two commands for the backend application:
+```bash
+docker compose build
+docker compose up -d --no-cache
 ```
 
 
@@ -39,9 +49,13 @@ docker exec -it learning-cards-application-app pytest -s test_app.py
 
 ## Setup the frontend Instructions 
 
+Back runs on http://localhost:3000/
+
+**In /front folder :**
+
 1. **Install Dependencies:**
     ```bash
-    cd front
+    
     npm install 
 
     ```
