@@ -36,21 +36,20 @@ To launch the backend test :
 docker exec -it learning-cards-application-app pytest -s test_app.py
 ```
 
-
 ## Setup the frontend Instructions 
 
 1. **Install Dependencies:**
-    ```bash
-    cd front
-    npm install 
+```bash
+cd front
+npm install 
 
-    ```
+```
 
 2. **Launch the Frontend::**
-    ```bash
-    npm start 
-    
-    ```
+```bash
+npm start 
+
+```
 
 ## Running the Frontend test
 
