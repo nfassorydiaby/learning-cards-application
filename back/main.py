@@ -74,7 +74,7 @@ async def createCard(card: Card, db: dbDependency):
 
 @app.get("/cards/quizz/", response_model=List[Card], status_code=status.HTTP_201_CREATED, tags=["Learning"])
 async def getQuizCards(db: dbDependency, date: str | None = None):
-    cards = db.query(models.Card).filter(models.Card.category < 7).all()
+    cards = db.query(models.Card).filter(models.Card.category != Category.DONE.value).all()
     quizzCards = []
     for card in cards:
         if card.remainingDays == 0:
@@ -89,6 +89,13 @@ async def getQuizCards(db: dbDependency, date: str | None = None):
 @app.patch('/cards/{cardId}/answer/', status_code=status.HTTP_204_NO_CONTENT, tags=["Learning"])
 async def checkResponse(db: dbDependency, cardId: UUID4, cardResponse: dict = Body(validBody)):
     card = db.query(models.Card).filter(models.Card.id == str(cardId)).first()
+
+    if not card:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Card not found")
+    
+    if not cardResponse['isValid']:
+        # Bad request scenario
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Bad request")
 
     if cardResponse['isValid']:
         currentCategoryIndex = list(Category).index(card.category)
