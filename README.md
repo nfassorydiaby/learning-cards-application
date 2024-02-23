@@ -57,4 +57,4 @@ docker exec -it learning-cards-application-app pytest -s test_app.py
 To launch the fronted test :
 ```bash
     npm test  
-    ```
+```
