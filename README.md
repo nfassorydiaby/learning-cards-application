@@ -1,17 +1,58 @@
-# learning-cards-application
+# Learning Cards Application
 
-# create virtuel envireonement 
-python3 -m venv env
+This repository contains the code for a learning cards application.
 
-# activate you environement 
-source env/bin/activate
+## Setup the backend Instructions 
 
-# install dependency 
-pip install -r requirements.txt
+1. **Create a Virtual Environment:**
+    ```bash
+    python3 -m venv env
+    ```
 
-# lunsh back end app 
+2. **Activate Your Environment:**
+    ```bash
+    source env/bin/activate
+    ```
 
-uvicorn main:app --port 8000 --reload
+3. **Install Dependencies:**
+    ```bash
+    pip install -r requirements.txt
+    ```
 
-# to lunsh test we can do 
-docker exec -it learning-cards-application-app-1 pytest -s test_app.py
+## Running the Backend Application
+
+To launch the backend application, use the following command:
+```bash
+docker compose build
+docker compose up -d
+```
+
+
+## Running the test
+
+To launch the backend test :
+```bash
+docker exec -it learning-cards-application-app pytest -s test_app.py
+```
+
+
+## Setup the frontend Instructions 
+
+1. **Install Dependencies:**
+    ```bash
+    npm install 
+
+    ```
+
+2. **Launch the Frontend::**
+    ```bash
+    npm start 
+    
+    ```
+
+## Running the test
+
+To launch the backend test :
+```bash
+ command of front test
+```
