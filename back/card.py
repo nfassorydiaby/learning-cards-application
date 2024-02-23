@@ -3,7 +3,6 @@ from pydantic import BaseModel, Field
 from typing import Optional
 from uuid import UUID, uuid4
 from cardId import CardId
-from card_quizz import list_card_by_frequency
 
 
 class Card(BaseModel):

@@ -24,17 +24,17 @@ app = FastAPI(
     description="This API aim to provide feature to manage a graphical interface for Learning Cards Application.")
 
 origins = [
-    "http://localhost:3000", 
-    "http://localhost:3001", 
+    "http://localhost:3000",
+    "http://localhost:3001",
     "http://localhost:8000"
 ]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,  # Les origines qui peuvent faire des requêtes
+    allow_origins=origins,
     allow_credentials=True,
-    allow_methods=["*"],  # Autoriser toutes les méthodes
-    allow_headers=["*"],  # Autoriser tous les headers
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 
@@ -46,6 +46,7 @@ validBody = {
     "isValid": True
 }
 # getting the database
+
 
 def getDb():
     db = SessionLocal()
@@ -74,14 +75,16 @@ async def createCard(card: Card, db: dbDependency):
 
 @app.get("/cards/quizz/", response_model=List[Card], status_code=status.HTTP_201_CREATED, tags=["Learning"])
 async def getQuizCards(db: dbDependency, date: str | None = None):
-    cards = db.query(models.Card).filter(models.Card.category != Category.DONE.value).all()
+    cards = db.query(models.Card).filter(
+        models.Card.category != Category.DONE.value).all()
     quizzCards = []
     for card in cards:
         if card.remainingDays == 0:
             quizzCards.append(card)
         else:
             card.remainingDays -= 1
-            db.query(models.Card).filter(models.Card.id == card.id).update({"remainingDays": card.remainingDays})
+            db.query(models.Card).filter(models.Card.id == card.id).update(
+                {"remainingDays": card.remainingDays})
             db.commit()
     return quizzCards
 
@@ -91,11 +94,13 @@ async def checkResponse(db: dbDependency, cardId: UUID4, cardResponse: dict = Bo
     card = db.query(models.Card).filter(models.Card.id == str(cardId)).first()
 
     if not card:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Card not found")
-    
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Card not found")
+
     if not cardResponse['isValid']:
         # Bad request scenario
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Bad request")
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail="Bad request")
 
     if cardResponse['isValid']:
         currentCategoryIndex = list(Category).index(card.category)
@@ -112,4 +117,3 @@ async def checkResponse(db: dbDependency, cardId: UUID4, cardResponse: dict = Bo
         card.category = Category.FIRST.value
         card.remainingDays = 0
         db.commit()
-
