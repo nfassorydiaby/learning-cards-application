@@ -9,20 +9,19 @@ Back runs on http://localhost:8000/
 **In /back folder :**
 
 1. **Create a Virtual Environment:**
-    ```bash
-    cd back
-    python3 -m venv env
-    ```
+```bash
+python3 -m venv env
+```
 
 2. **Activate Your Environment:**
-    ```bash
-    source env/bin/activate
-    ```
+```bash
+source env/bin/activate
+```
 
 3. **Install Dependencies:**
-    ```bash
-    pip install -r requirements.txt
-    ```
+```bash
+pip install -r requirements.txt
+```
 
 ## Running the Backend Application
 
@@ -46,7 +45,6 @@ To launch the backend test :
 docker exec -it learning-cards-application-app pytest -s test_app.py
 ```
 
-
 ## Setup the frontend Instructions 
 
 Back runs on http://localhost:3000/
@@ -54,21 +52,20 @@ Back runs on http://localhost:3000/
 **In /front folder :**
 
 1. **Install Dependencies:**
-    ```bash
-    
-    npm install 
+```bash
+npm install 
 
-    ```
+```
 
 2. **Launch the Frontend::**
-    ```bash
-    npm start 
-    
-    ```
+```bash
+npm start 
+
+```
 
 ## Running the Frontend test
 
 To launch the fronted test :
 ```bash
-    npm test  
-    ```
+npm test  
+```
