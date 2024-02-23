@@ -109,7 +109,8 @@ function QuizPage() {
         {quizCards.length > 0 && (
           <div className="bg-white shadow-md rounded px-8 py-6">
             <h2 className="text-xl font-semibold mb-4">Question {currentCardIndex + 1}</h2>
-            <p className="mb-4">{quizCards[currentCardIndex].question}</p>
+            <p className="mb-4 font-light"> Tag : {quizCards[currentCardIndex].tag}</p>
+            <p className="mb-4 font-normal">{quizCards[currentCardIndex].question}</p>
             <input
               type="text"
               value={userResponse}
