@@ -1,12 +1,12 @@
 import React from 'react';
-import LireCartes from './components/LireCartes';
+import ReadCards from './components/ReadCards'
 import './index.css'; // Import Tailwind CSS
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <LireCartes />
+        <ReadCards />
       </header>
     </div>
   );
