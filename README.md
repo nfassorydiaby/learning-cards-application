@@ -6,6 +6,7 @@ This repository contains the code for a learning cards application.
 
 1. **Create a Virtual Environment:**
     ```bash
+    cd back
     python3 -m venv env
     ```
 
@@ -40,6 +41,7 @@ docker exec -it learning-cards-application-app pytest -s test_app.py
 
 1. **Install Dependencies:**
     ```bash
+    cd front
     npm install 
 
     ```
@@ -50,9 +52,10 @@ docker exec -it learning-cards-application-app pytest -s test_app.py
     
     ```
 
-## Running the test
+## Running the Frontend test
 
-To launch the backend test :
+To launch the fronted test :
 ```bash
- command of front test
-```
+    npm test 
+    
+    ```
