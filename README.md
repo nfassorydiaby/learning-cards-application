@@ -4,7 +4,7 @@ This repository contains the code for a learning cards application.
 
 ## Setup the backend Instructions 
 
-Back runs on http://localhost:8000/
+Back runs on http://localhost:8000/docs
 
 **In /back folder :**
 
